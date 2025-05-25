@@ -1,6 +1,7 @@
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
+import { Link } from "expo-router";
 
 export default function Main() {
   return (
@@ -34,14 +35,16 @@ export default function Main() {
             />
           </View>
 
-          <Pressable className="bg-blue-600 w-full rounded-lg p-4 active:bg-blue-700">
-            <View className="flex-row items-center justify-center">
-              <Feather name="log-in" size={20} color="#fff" />
-              <Text className="text-white text-base font-bold ml-2">
-                Iniciar Sesión
-              </Text>
-            </View>
-          </Pressable>
+          <Link href="/logueo" asChild>
+            <Pressable className="bg-blue-600 w-full rounded-lg p-4 active:bg-blue-700">
+              <View className="flex-row items-center justify-center">
+                <Feather name="log-in" size={20} color="#fff" />
+                <Text className="text-white text-base font-bold ml-2">
+                  Iniciar Sesión
+                </Text>
+              </View>
+            </Pressable>
+          </Link>
         </View>
       </View>
 
@@ -179,14 +182,16 @@ export default function Main() {
             </View>
           </View>
 
-          <Pressable className="w-full mt-4 rounded-lg p-4  bg-black active:bg-gray-800 text-white">
-            <View className="flex-row items-center justify-center">
-              <Ionicons name="phone" size={20} color="#fff" />
-              <Text className="text-white text-base font-bold ml-2">
-                Escribir por WhatsApp
-              </Text>
-            </View>
-          </Pressable>
+          <Link href="https://web.whatsapp.com/" asChild>
+            <Pressable className="w-full mt-4 rounded-lg p-4  bg-black active:bg-gray-800 text-white">
+              <View className="flex-row items-center justify-center">
+                <Ionicons name="phone" size={20} color="#fff" />
+                <Text className="text-white text-base font-bold ml-2">
+                  Escribir por WhatsApp
+                </Text>
+              </View>
+            </Pressable>
+          </Link>
         </View>
       </View>
     </ScrollView>

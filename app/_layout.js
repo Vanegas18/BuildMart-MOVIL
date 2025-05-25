@@ -1,4 +1,4 @@
-import { Slot } from "expo-router";
+import { Link, Slot } from "expo-router";
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/AntDesign";
@@ -16,20 +16,26 @@ export default function Layout() {
       {/* Bottom Navigation - Posición absoluta */}
       <View style={styles.bottomNav}>
         <View style={styles.navContainer}>
-          <Pressable style={styles.navItem}>
-            <Ionicons name="home" size={24} color="#2563eb" />
-            <Text style={styles.navText}>Inicio</Text>
-          </Pressable>
+          <Link href="/" asChild>
+            <Pressable style={styles.navItem}>
+              <Ionicons name="home" size={24} color="#2563eb" />
+              <Text style={styles.navText}>Inicio</Text>
+            </Pressable>
+          </Link>
 
-          <Pressable style={styles.navItem}>
-            <Ionicons name="shoppingcart" size={24} color="#2563eb" />
-            <Text style={styles.navText}>Tienda</Text>
-          </Pressable>
+          <Link href="/catalogo" asChild>
+            <Pressable style={styles.navItem}>
+              <Ionicons name="shoppingcart" size={24} color="#2563eb" />
+              <Text style={styles.navText}>Tienda</Text>
+            </Pressable>
+          </Link>
 
-          <Pressable style={styles.navItem}>
-            <Ionicons name="user" size={24} color="#2563eb" />
-            <Text style={styles.navText}>Perfil</Text>
-          </Pressable>
+          <Link href="/perfil" asChild>
+            <Pressable style={styles.navItem}>
+              <Ionicons name="user" size={24} color="#2563eb" />
+              <Text style={styles.navText}>Perfil</Text>
+            </Pressable>
+          </Link>
         </View>
       </View>
     </View>
