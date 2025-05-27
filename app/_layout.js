@@ -2,43 +2,46 @@ import { Link, Slot } from "expo-router";
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/AntDesign";
+import { AuthProvider } from "../core/context/Acceso/AuthContext";
 
 export default function Layout() {
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
+    <AuthProvider>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
 
-      {/* Contenido principal con padding bottom para el footer */}
-      <View style={styles.content}>
-        <Slot />
-      </View>
+        {/* Contenido principal con padding bottom para el footer */}
+        <View style={styles.content}>
+          <Slot />
+        </View>
 
-      {/* Bottom Navigation - Posición absoluta */}
-      <View style={styles.bottomNav}>
-        <View style={styles.navContainer}>
-          <Link href="/" asChild>
-            <Pressable style={styles.navItem}>
-              <Ionicons name="home" size={24} color="#2563eb" />
-              <Text style={styles.navText}>Inicio</Text>
-            </Pressable>
-          </Link>
+        {/* Bottom Navigation - Posición absoluta */}
+        <View style={styles.bottomNav}>
+          <View style={styles.navContainer}>
+            <Link href="/" asChild>
+              <Pressable style={styles.navItem}>
+                <Ionicons name="home" size={24} color="#2563eb" />
+                <Text style={styles.navText}>Inicio</Text>
+              </Pressable>
+            </Link>
 
-          <Link href="/catalogo" asChild>
-            <Pressable style={styles.navItem}>
-              <Ionicons name="shoppingcart" size={24} color="#2563eb" />
-              <Text style={styles.navText}>Tienda</Text>
-            </Pressable>
-          </Link>
+            <Link href="/catalogo" asChild>
+              <Pressable style={styles.navItem}>
+                <Ionicons name="shoppingcart" size={24} color="#2563eb" />
+                <Text style={styles.navText}>Tienda</Text>
+              </Pressable>
+            </Link>
 
-          <Link href="/perfil" asChild>
-            <Pressable style={styles.navItem}>
-              <Ionicons name="user" size={24} color="#2563eb" />
-              <Text style={styles.navText}>Perfil</Text>
-            </Pressable>
-          </Link>
+            <Link href="/perfil" asChild>
+              <Pressable style={styles.navItem}>
+                <Ionicons name="user" size={24} color="#2563eb" />
+                <Text style={styles.navText}>Perfil</Text>
+              </Pressable>
+            </Link>
+          </View>
         </View>
       </View>
-    </View>
+    </AuthProvider>
   );
 }
 

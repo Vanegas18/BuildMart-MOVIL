@@ -1,4 +1,4 @@
-import LogueoView from "../components/Logueo";
+import LogueoView from "../components/Acceso/LogueoView";
 
 export default function Catalogo() {
   return <LogueoView />;
