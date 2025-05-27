@@ -1,5 +1,5 @@
-import LogueoView from "../components/Acceso/LogueoView";
+import { FormLoginSimple } from "../components/Acceso/FormLoginSimple";
 
 export default function Catalogo() {
-  return <LogueoView />;
+  return <FormLoginSimple />;
 }

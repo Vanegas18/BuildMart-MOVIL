@@ -1,109 +1,250 @@
-// FormFieldModern.js
-import React from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-// Versión SIN react-hook-form para evitar errores
+// Componente de campo de entrada moderno
 export const FormFieldModern = ({
-  id,
   label,
-  type = "text",
-  placeholder,
   value,
   onChangeText,
   error,
-  maxLength,
+  placeholder,
   secureTextEntry = false,
   keyboardType = "default",
-  multiline = false,
-  numberOfLines = 1,
+  autoCapitalize = "sentences",
 }) => {
-  const getKeyboardType = () => {
-    switch (type) {
-      case "email":
-        return "email-address";
-      case "tel":
-      case "phone":
-        return "phone-pad";
-      case "number":
-        return "numeric";
-      default:
-        return keyboardType;
-    }
-  };
-
-  const getSecureTextEntry = () => {
-    return type === "password" || secureTextEntry;
-  };
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = secureTextEntry;
 
   return (
-    <View style={modernStyles.fieldContainer}>
-      <Text style={modernStyles.label}>{label}</Text>
-
-      <TextInput
-        style={[
-          modernStyles.input,
-          error && modernStyles.inputError,
-          multiline && modernStyles.multilineInput,
-        ]}
-        placeholder={placeholder}
-        placeholderTextColor="#9ca3af"
-        value={value}
-        onChangeText={onChangeText}
-        maxLength={maxLength}
-        secureTextEntry={getSecureTextEntry()}
-        keyboardType={getKeyboardType()}
-        multiline={multiline}
-        numberOfLines={numberOfLines}
-        autoCapitalize={type === "email" ? "none" : "sentences"}
-        autoCorrect={type === "email" || type === "password" ? false : true}
-      />
-
-      {error && <Text style={modernStyles.errorText}>{error}</Text>}
+    <View style={styles.fieldContainer}>
+      <Text style={styles.label}>{label}</Text>
+      <View style={[styles.inputContainer, error && styles.inputError]}>
+        <TextInput
+          style={styles.input}
+          placeholder={placeholder}
+          placeholderTextColor="#9ca3af"
+          value={value}
+          onChangeText={onChangeText}
+          secureTextEntry={isPassword && !showPassword}
+          keyboardType={keyboardType}
+          autoCapitalize={autoCapitalize}
+          autoCorrect={false}
+        />
+        {isPassword && (
+          <TouchableOpacity
+            style={styles.eyeButton}
+            onPress={() => setShowPassword(!showPassword)}
+            activeOpacity={0.7}>
+            <Text style={styles.eyeText}>
+              {showPassword ? (
+                <Ionicons name="eye-off-outline" size={24} color="#6b7280" />
+              ) : (
+                <Ionicons name="eye" size={24} color="#6b7280" />
+              )}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
 
-const modernStyles = StyleSheet.create({
-  fieldContainer: {
-    marginBottom: 20,
+const styles = {
+  container: {
+    flex: 1,
+    backgroundColor: "#f8fafc",
   },
-  label: {
-    fontSize: 14,
-    fontWeight: "500",
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: "#ffffff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e5e7eb",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  backButton: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: "#f3f4f6",
+  },
+  headerContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#111827",
+  },
+  headerTitleBlue: {
+    color: "#3b82f6",
+  },
+  headerSpacer: {
+    width: 40, // Para balancear el botón de atrás
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 40,
+  },
+  titleSection: {
+    alignItems: "center",
+    marginBottom: 40,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
     color: "#111827",
     marginBottom: 8,
+    textAlign: "center",
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#e5e7eb",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+  subtitle: {
     fontSize: 16,
+    color: "#6b7280",
+    textAlign: "center",
+    lineHeight: 24,
+  },
+  formContainer: {
     backgroundColor: "#ffffff",
-    minHeight: 48,
+    borderRadius: 16,
+    padding: 32,
+    marginBottom: 24,
+    width: "100%",
+    maxWidth: 480,
+    alignSelf: "center",
+    elevation: 4,
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  fieldContainer: {
+    marginBottom: 24,
+  },
+  label: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 8,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1.5,
+    borderColor: "#e5e7eb",
+    borderRadius: 12,
+    backgroundColor: "#ffffff",
+    minHeight: 52,
   },
   inputError: {
-    borderColor: "#f87171",
-    borderWidth: 1.5,
+    borderColor: "#ef4444",
   },
-  multilineInput: {
-    minHeight: 96,
-    textAlignVertical: "top",
-    paddingTop: 12,
+  input: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    color: "#111827",
+  },
+  eyeButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  eyeText: {
+    fontSize: 20,
   },
   errorText: {
-    fontSize: 12,
-    color: "#f87171",
+    fontSize: 13,
+    color: "#ef4444",
     marginTop: 6,
-    fontWeight: "400",
+    fontWeight: "500",
   },
-});
+  authErrorContainer: {
+    backgroundColor: "#fef2f2",
+    borderWidth: 1,
+    borderColor: "#fecaca",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+  },
+  authErrorText: {
+    color: "#dc2626",
+    fontSize: 14,
+    textAlign: "center",
+    fontWeight: "500",
+  },
+  submitButton: {
+    backgroundColor: "#3b82f6",
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 16,
+    elevation: 3,
+    shadowColor: "#3b82f6",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+  submitButtonDisabled: {
+    opacity: 0.6,
+  },
+  submitButtonText: {
+    color: "#ffffff",
+    fontSize: 17,
+    fontWeight: "600",
+  },
+  loadingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  loadingText: {
+    color: "#ffffff",
+    fontSize: 17,
+    fontWeight: "600",
+    marginLeft: 8,
+  },
+  forgotPasswordButton: {
+    alignItems: "center",
+    paddingVertical: 12,
+  },
+  forgotPasswordText: {
+    fontSize: 15,
+    color: "#3b82f6",
+    fontWeight: "500",
+  },
+  registerSection: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    padding: 20,
+    maxWidth: 480,
+    alignSelf: "center",
+    width: "100%",
+  },
+  registerText: {
+    fontSize: 15,
+    color: "#6b7280",
+  },
+  registerLink: {
+    fontSize: 15,
+    color: "#3b82f6",
+    fontWeight: "600",
+  },
+};
