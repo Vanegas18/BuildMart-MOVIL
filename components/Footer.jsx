@@ -52,16 +52,32 @@ export const Footer = () => {
           </Link>
 
           {isAuthenticated && isCuentaRol ? (
-            <Link href="/perfil" asChild>
-              <Pressable style={styles.navItem}>
-                <Ionicons name="person-outline" size={24} color="#2563eb" />
-                <Text style={styles.navText}>Perfil</Text>
-              </Pressable>
-            </Link>
+            <>
+              <Link href="/perfil" asChild>
+                <Pressable style={styles.navItem}>
+                  <Ionicons name="person-outline" size={24} color="#2563eb" />
+                  <Text style={styles.navText}>Perfil</Text>
+                </Pressable>
+              </Link>
+
+              <Link href="/pedidos" asChild>
+                <Pressable style={styles.navItem}>
+                  <Ionicons name="receipt-outline" size={24} color="#2563eb" />
+                  <Text style={styles.navText}>Pedidos</Text>
+                </Pressable>
+              </Link>
+
+              <Link href="/ventas" asChild>
+                <Pressable style={styles.navItem}>
+                  <Ionicons name="trending-up" size={24} color="#2563eb" />
+                  <Text style={styles.navText}>Compras</Text>
+                </Pressable>
+              </Link>
+            </>
           ) : (
             isAdmin && (
               <>
-                <Link href="/" asChild>
+                <Link href="/pedidos" asChild>
                   <Pressable style={styles.navItem}>
                     <Ionicons
                       name="receipt-outline"
@@ -71,7 +87,8 @@ export const Footer = () => {
                     <Text style={styles.navText}>Pedidos</Text>
                   </Pressable>
                 </Link>
-                <Link href="/" asChild>
+
+                <Link href="/ventas" asChild>
                   <Pressable style={styles.navItem}>
                     <Ionicons name="trending-up" size={24} color="#2563eb" />
                     <Text style={styles.navText}>Ventas</Text>

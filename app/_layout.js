@@ -4,30 +4,33 @@ import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "../core/context/Acceso/AuthContext";
 import { Footer } from "../components/Footer";
 import Toast from "react-native-toast-message";
+import { PedidosProvider } from "../core/context/Pedidos/PedidosContext";
 
 export default function Layout() {
   return (
     <AuthProvider>
-      <View style={styles.container}>
-        <StatusBar style="auto" />
+      <PedidosProvider>
+        <View style={styles.container}>
+          <StatusBar style="auto" />
 
-        {/* Contenido principal con padding bottom para el footer */}
-        <View style={styles.content}>
-          <Slot />
+          {/* Contenido principal con padding bottom para el footer */}
+          <View style={styles.content}>
+            <Slot />
+          </View>
+
+          {/* Footer con navegación */}
+          <Footer />
+
+          {/* Toast para notificaciones */}
+          <Toast
+            position="top"
+            autoHide={true}
+            visibilityTime={2000}
+            topOffset={30}
+            style={{ zIndex: 1000 }} // Asegura que el Toast esté por encima de otros componentes
+          />
         </View>
-
-        {/* Footer con navegación */}
-        <Footer />
-
-        {/* Toast para notificaciones */}
-        <Toast
-          position="top"
-          autoHide={true}
-          visibilityTime={2000}
-          topOffset={30}
-          style={{ zIndex: 1000 }} // Asegura que el Toast esté por encima de otros componentes
-        />
-      </View>
+      </PedidosProvider>
     </AuthProvider>
   );
 }
@@ -35,7 +38,6 @@ export default function Layout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 32, // equivalent to mt-8
     backgroundColor: "#FFF", // orange-50 background
   },
   content: {

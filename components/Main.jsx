@@ -101,12 +101,12 @@ export default function Main() {
               </Link>
             </>
           ) : (
-            <Link href="/perfil" asChild>
+            <Link href="/catalogo" asChild>
               <Pressable className="bg-blue-600 w-full rounded-lg p-4 active:bg-blue-700">
                 <View className="flex-row items-center justify-center">
                   <Ionicons name="person-outline" size={20} color="#fff" />
                   <Text className="text-white text-base font-bold ml-2">
-                    Ir a Mi Perfil
+                    Ir al Catálogo
                   </Text>
                 </View>
               </Pressable>
