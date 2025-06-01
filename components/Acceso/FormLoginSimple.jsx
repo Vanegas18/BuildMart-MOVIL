@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   ScrollView,
   SafeAreaView,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -86,6 +87,7 @@ export const FormLoginSimple = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
       {/* Header con botón de volver */}
       <View style={styles.header}>
         <TouchableOpacity

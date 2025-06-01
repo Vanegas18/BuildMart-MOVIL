@@ -14,16 +14,10 @@ export default function Layout() {
         <PedidosProvider>
           <SafeAreaView className="flex-1 bg-white">
             {/* StatusBar configuration */}
-            <StatusBar
-              style="dark"
-              backgroundColor="transparent"
-              translucent={Platform.OS === "android"}
-            />
+            <StatusBar style="dark" translucent={Platform.OS === "android"} />
 
             {/* Contenido principal */}
             <View className="flex-1 pb-20">
-              {" "}
-              {/* pb-20 = 80px para el footer */}
               <Slot />
             </View>
 

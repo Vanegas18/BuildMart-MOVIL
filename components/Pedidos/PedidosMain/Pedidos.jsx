@@ -28,14 +28,11 @@ import {
 
 export const Pedidos = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isCuentaRol, setIsCuentaRol] = useState(false);
-  const [hasInitialized, setHasInitialized] = useState(false);
+  const [expandedOrder, setExpandedOrder] = useState(null);
 
   const { user, isAuthenticated, checkAuthStatus } = useAuth();
-  const { pedidos, isLoading, obtenerPedidos, lastFetch } = usePedidos();
+  const { pedidos, isLoading, obtenerPedidos, lastFetch, error } = usePedidos();
   const navigation = useNavigation();
-  const [expandedOrder, setExpandedOrder] = useState(null);
 
   // Estados para filtros y búsqueda
   const [filtroModal, setFiltroModal] = useState(false);
@@ -95,37 +92,32 @@ export const Pedidos = () => {
     return pedidosFiltradosTemp;
   }, [pedidosBase, estadoFiltro, busqueda]);
 
-  // Efecto para verificar el rol del usuario
+  // ✅ Cargar pedidos inmediatamente cuando el componente se monta
   useEffect(() => {
-    const verifyRoles = async () => {
-      if (isAuthenticated && (!user || !user.rol)) {
-        await checkAuthStatus();
+    const loadInitialData = async () => {
+      if (isAuthenticated && user) {
+        try {
+          await obtenerPedidos();
+        } catch (error) {
+          console.error("Error al cargar pedidos iniciales:", error);
+        }
       }
-
-      setIsCuentaRol(userRoles.isCuentaRol);
-      setIsAdmin(userRoles.isAdmin);
     };
 
-    verifyRoles();
-  }, [user, isAuthenticated, checkAuthStatus, userRoles]);
+    loadInitialData();
+  }, [isAuthenticated, user, obtenerPedidos]);
 
-  // Cargar pedidos solo cuando es necesario
-  const loadPedidos = useCallback(async () => {
-    if (!hasInitialized) {
-      try {
-        await obtenerPedidos();
-        setHasInitialized(true);
-      } catch (error) {
-        console.error("Error al obtener pedidos:", error);
-      }
-    }
-  }, [obtenerPedidos, hasInitialized]);
-
-  // useFocusEffect para cargar datos solo cuando la pantalla está enfocada y es necesario
+  // ✅ Refrescar cuando la pantalla está enfocada (pero solo si es necesario)
   useFocusEffect(
     useCallback(() => {
-      loadPedidos();
-    }, [loadPedidos])
+      // Solo refrescar si no hay datos o si han pasado más de 2 minutos
+      const shouldRefresh =
+        !lastFetch || Date.now() - lastFetch > 2 * 60 * 1000;
+
+      if (shouldRefresh && isAuthenticated && user) {
+        obtenerPedidos();
+      }
+    }, [obtenerPedidos, lastFetch, isAuthenticated, user])
   );
 
   // Handlers
@@ -152,11 +144,29 @@ export const Pedidos = () => {
 
   // Determinar qué mostrar basado en el estado
   const renderContent = () => {
-    // Mostrar loading solo si es la primera carga o si está cargando sin datos
-    const showLoading = isLoading && (!hasInitialized || pedidos.length === 0);
-
-    if (showLoading) {
+    // Mostrar loading solo al inicio o cuando no hay datos
+    if (isLoading && pedidos.length === 0) {
       return <LoadingState isAdmin={userRoles.isAdmin} />;
+    }
+
+    // Mostrar error si existe
+    if (error && pedidos.length === 0) {
+      return (
+        <View className="items-center py-16 px-6">
+          <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+          <Text className="text-xl font-bold text-gray-900 mb-3 text-center mt-4">
+            Error al cargar pedidos
+          </Text>
+          <Text className="text-base text-gray-500 text-center mb-6">
+            {error}
+          </Text>
+          <TouchableOpacity
+            onPress={handleRefresh}
+            className="bg-blue-500 px-6 py-3 rounded-xl">
+            <Text className="text-white font-semibold">Reintentar</Text>
+          </TouchableOpacity>
+        </View>
+      );
     }
 
     // Si hay pedidos filtrados, mostrarlos
@@ -204,7 +214,7 @@ export const Pedidos = () => {
               {userRoles.isAdmin ? "Pedidos realizados" : "Mis pedidos"}
             </Text>
             <Text className="text-sm text-gray-500 mt-1">
-              {isLoading && !hasInitialized
+              {isLoading && pedidos.length === 0
                 ? "Cargando pedidos..."
                 : `${pedidosFiltrados?.length || 0} pedidos encontrados${
                     estadoFiltro !== "todos" ? ` • ${estadoFiltro}` : ""
@@ -215,6 +225,7 @@ export const Pedidos = () => {
           {/* Botón de refresh */}
           <TouchableOpacity
             onPress={handleRefresh}
+            disabled={isLoading}
             className="mr-2 p-2 rounded-full bg-gray-100">
             <Ionicons
               name="refresh-outline"
@@ -259,13 +270,13 @@ export const Pedidos = () => {
         )}
 
         {/* Indicador de caché */}
-        {lastFetch && !isLoading && (
+        {/* {lastFetch && !isLoading && (
           <View className="px-6 pb-2">
             <Text className="text-xs text-gray-400 text-center">
               Última actualización: {new Date(lastFetch).toLocaleTimeString()}
             </Text>
           </View>
-        )}
+        )} */}
       </View>
 
       {/* Lista de pedidos */}

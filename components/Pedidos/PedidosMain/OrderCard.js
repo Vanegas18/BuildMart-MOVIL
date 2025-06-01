@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Badge } from "./Badge";
 import { DetallePedidoModal } from "../DetallePedido";
+import { CambiarEstado } from "../CambiarEstado/CambiarEstado";
+import { useNavigation } from "@react-navigation/native";
 
 export const OrderCard = ({
   pedido,
@@ -16,6 +18,7 @@ export const OrderCard = ({
   const statusConfig = getStatusConfig(pedido.estado);
   const isExpanded = expandedOrder === pedido._id;
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
 
   const toggleExpanded = () => {
     onToggleExpanded(pedido._id);
@@ -204,22 +207,50 @@ export const OrderCard = ({
       <View className="flex space-x-3">
         {isAdmin ? (
           // Vista para administradores - Solo cambiar estado
-          <TouchableOpacity className="bg-amber-500 hover:bg-amber-600 flex-1 py-3 rounded-xl flex-row justify-center items-center space-x-2 shadow-sm">
-            <Ionicons name="refresh-outline" size={18} color="white" />
-            <Text className="text-white font-semibold">Cambiar Estado</Text>
-          </TouchableOpacity>
+          <CambiarEstado pedido={pedido} onEstadoCambiado={() => {}} />
         ) : // Vista para clientes
         pedido.estado === "pendiente" ? (
           // Pedido pendiente - mostrar cancelar
-          <TouchableOpacity className="bg-red-500 hover:bg-red-600 flex-1 py-3 rounded-xl flex-row justify-center items-center space-x-2 shadow-sm">
-            <Ionicons name="close" size={18} color="white" />
-            <Text className="text-white font-semibold">Cancelar Pedido</Text>
-          </TouchableOpacity>
+          <CambiarEstado pedido={pedido} onEstadoCambiado={() => {}} />
         ) : (
           // Pedido confirmado/cancelado - mostrar comprar nuevamente
-          <TouchableOpacity className="bg-blue-500 hover:bg-blue-600 flex-1 py-3 rounded-xl flex-row justify-center items-center space-x-2 shadow-sm">
-            <Ionicons name="refresh-outline" size={18} color="white" />
-            <Text className="text-white font-semibold">Comprar Nuevamente</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("catalogo")}
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingVertical: 14,
+              paddingHorizontal: 20,
+              borderRadius: 12,
+              backgroundColor: "#2563eb",
+              borderWidth: 1,
+              borderColor: "#1d4ed8",
+              shadowColor: "#2563eb",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 4,
+              elevation: 3,
+            }}>
+            {/* Ícono de refresh */}
+            <Ionicons
+              name="refresh-outline"
+              size={18}
+              color="#ffffff"
+              style={{ marginRight: 8 }}
+            />
+
+            {/* Texto */}
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: "600",
+                color: "#ffffff",
+                textAlign: "center",
+              }}>
+              Comprar Nuevamente
+            </Text>
           </TouchableOpacity>
         )}
       </View>
