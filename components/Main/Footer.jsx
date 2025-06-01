@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useAuth } from "../core/context/Acceso/AuthContext";
+import { useAuth } from "../../core/context/Acceso/AuthContext";
 import { useEffect, useState } from "react";
 
 export const Footer = () => {
