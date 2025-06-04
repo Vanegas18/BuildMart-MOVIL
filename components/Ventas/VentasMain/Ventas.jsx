@@ -125,7 +125,7 @@ export const Ventas = () => {
   }, []);
 
   const handleExploreProducts = useCallback(() => {
-    navigation.navigate("Catalogo");
+    navigation.navigate("catalogo");
   }, [navigation]);
 
   const handleRefresh = useCallback(async () => {

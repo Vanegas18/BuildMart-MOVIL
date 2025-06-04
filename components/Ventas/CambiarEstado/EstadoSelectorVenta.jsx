@@ -65,14 +65,20 @@ export const EstadoSelectorVenta = ({
         {selectedEstado && (
           <View className="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
             <Text className="text-sm text-blue-800 text-center">
-              {selectedEstado === "reembolsado" &&
-                "💰 El reembolso será procesado en 3-5 días hábiles"}
-              {selectedEstado === "completado" &&
-                "✅ La venta será marcada como completada exitosamente"}
-              {selectedEstado === "entregado" &&
-                "📦 El pedido será marcado como entregado al cliente"}
-              {selectedEstado === "enviado" &&
-                "🚚 El pedido será marcado como enviado"}
+              {(() => {
+                switch (selectedEstado) {
+                  case "reembolsado":
+                    return "💰 El reembolso será procesado en 3-5 días hábiles";
+                  case "completado":
+                    return "✅ La venta será marcada como completada exitosamente";
+                  case "entregado":
+                    return "📦 El pedido será marcado como entregado al cliente";
+                  case "enviado":
+                    return "🚚 El pedido será marcado como enviado";
+                  default:
+                    return "";
+                }
+              })()}
             </Text>
           </View>
         )}
@@ -95,36 +101,6 @@ export const EstadoSelectorVenta = ({
           {getConfirmationMessage()}
         </Text>
       </TouchableOpacity>
-
-      {/* Información de la venta */}
-      <View className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-        <Text className="text-sm font-semibold text-gray-700 mb-2">
-          Detalles de la venta:
-        </Text>
-        <View className="space-y-1">
-          <Text className="text-xs text-gray-600">
-            ID: <Text className="font-mono">{venta._id?.slice(-8)}</Text>
-          </Text>
-          <Text className="text-xs text-gray-600">
-            Estado actual:{" "}
-            <Text className="font-semibold capitalize">{venta.estado}</Text>
-          </Text>
-          <Text className="text-xs text-gray-600">
-            Total:{" "}
-            <Text className="font-semibold">
-              ${venta.total?.toLocaleString()}
-            </Text>
-          </Text>
-          {!isAdmin && (
-            <Text className="text-xs text-gray-600">
-              Cliente:{" "}
-              <Text className="font-semibold">
-                {venta.clienteId?.nombre || venta.clienteId?.correo}
-              </Text>
-            </Text>
-          )}
-        </View>
-      </View>
     </View>
   );
 };

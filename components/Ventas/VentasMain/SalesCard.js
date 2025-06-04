@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Badge } from "../../Pedidos/PedidosMain/Badge";
 import { useNavigation } from "@react-navigation/native";
 import { CambiarEstadoVenta } from "../CambiarEstado/CambiarEstadoVenta";
+import { DetalleVentaModal } from "../DetalleVenta";
 
 export const SalesCard = ({
   ventas, // Cambiado de venta a ventas para consistencia
@@ -79,11 +80,15 @@ export const SalesCard = ({
             name={statusConfig.icon}
             size={14}
             color={
-              statusConfig.textStyle.includes("amber")
-                ? "#92400E"
+              statusConfig.textStyle.includes("blue")
+                ? "#1E40AF"
+                : statusConfig.textStyle.includes("purple")
+                ? "#6B21A8"
+                : statusConfig.textStyle.includes("green")
+                ? "#166534"
                 : statusConfig.textStyle.includes("emerald")
                 ? "#065F46"
-                : "#991B1B"
+                : "#C2410C"
             }
           />
           <Text className={`text-sm font-semibold ${statusConfig.textStyle}`}>
@@ -226,6 +231,13 @@ export const SalesCard = ({
         </View>
       </View>
 
+      {/* Modal de detalles de la venta */}
+      <DetalleVentaModal
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        venta={ventas}
+      />
+
       {/* Acciones específicas para ventas */}
       <View className="flex space-x-3">
         {isAdmin ? (
@@ -234,7 +246,7 @@ export const SalesCard = ({
         ) : (
           // Vista para clientes - Comprar nuevamente
           <TouchableOpacity
-            onPress={() => navigation.navigate("Catalogo")}
+            onPress={() => navigation.navigate("catalogo")}
             style={{
               flex: 1,
               flexDirection: "row",
@@ -243,9 +255,9 @@ export const SalesCard = ({
               paddingVertical: 14,
               paddingHorizontal: 20,
               borderRadius: 12,
-              backgroundColor: "#16a34a",
+              backgroundColor: "blue",
               borderWidth: 1,
-              borderColor: "#15803d",
+              borderColor: "blue",
               shadowColor: "#16a34a",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.15,
