@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Badge } from "../../Pedidos/PedidosMain/Badge";
 import { useNavigation } from "@react-navigation/native";
+import { CambiarEstadoVenta } from "../CambiarEstado/CambiarEstadoVenta";
 
 export const SalesCard = ({
   ventas, // Cambiado de venta a ventas para consistencia
@@ -230,6 +231,9 @@ export const SalesCard = ({
         {isAdmin ? (
           // Vista para administradores - Acciones de venta
           <View className="flex-row space-x-3">
+            // Vista para administradores - Solo cambiar estado
+            <CambiarEstadoVenta venta={ventas} onEstadoCambiado={() => {}} />
+
             <TouchableOpacity
               style={{
                 flex: 1,
@@ -258,7 +262,6 @@ export const SalesCard = ({
                 Imprimir Factura
               </Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               style={{
                 flex: 1,
