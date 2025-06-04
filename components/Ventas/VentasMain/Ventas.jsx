@@ -1,42 +1,37 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import {
   Pressable,
   ScrollView,
-  Text,
-  View,
-  TouchableOpacity,
   StatusBar,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useAuth } from "../../../core/context/Acceso/AuthContext";
-import { usePedidos } from "../../../core/context/Pedidos/PedidosContext";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
-
-// Importar componentes separados
-import { OrderCard } from "./OrderCard";
-import { EmptyState } from "./EmptyState";
-import { FiltroModal } from "./FiltroModal";
+import { useCallback, useMemo, useState, useEffect } from "react";
+import { useVentas } from "../../../core/context/Ventas/VentasContext";
 import { LoadingState } from "../../LoadingState";
-
-// Importar funciones helper
 import {
   formatPrice,
   getStatusConfig,
   getNombreCliente,
-} from "../Utils/Helper";
+} from "./utils/HelperVentas";
 
-export const Pedidos = () => {
+import { SalesCard } from "./SalesCard";
+import { EmptyStateVentas } from "./EmptyStateVentas";
+import { FiltroModalVentas } from "./FiltroModalVenta";
+
+export const Ventas = () => {
   const [expandedOrder, setExpandedOrder] = useState(null);
-
-  const { user, isAuthenticated } = useAuth();
-  const { pedidos, isLoading, obtenerPedidos, lastFetch, error } = usePedidos();
-  const navigation = useNavigation();
-
-  // Estados para filtros y búsqueda
-  const [filtroModal, setFiltroModal] = useState(false);
   const [estadoFiltro, setEstadoFiltro] = useState("todos");
+  const [filtroModal, setFiltroModal] = useState(false);
   const [busqueda, setBusqueda] = useState("");
+
+  const navigation = useNavigation();
+  const { user, isAuthenticated } = useAuth();
+  const { ventas, isLoading, obtenerVentas, lastFetch, error } = useVentas();
 
   // Verificar roles del usuario (memoizado)
   const userRoles = useMemo(() => {
@@ -48,63 +43,63 @@ export const Pedidos = () => {
     return { isAdmin, isCuentaRol };
   }, [user?.rol]);
 
-  // Filtrar pedidos base según el rol (memoizado)
-  const pedidosBase = useMemo(() => {
-    if (!pedidos || !user) return [];
+  // Filtrar ventas base según el rol (memoizado)
+  const ventasBase = useMemo(() => {
+    if (!ventas || !user) return [];
 
     if (userRoles.isAdmin) {
-      return pedidos;
+      return ventas;
     } else {
-      return pedidos.filter((pedido) => {
-        const clienteId = pedido.clienteId?._id || pedido.clienteId;
+      return ventas.filter((venta) => {
+        const clienteId = venta.clienteId?._id || venta.clienteId;
         const userId = user._id || user.id;
 
         return (
           clienteId === userId ||
           String(clienteId) === String(userId) ||
-          pedido.clienteId?.correo === user.correo
+          venta.clienteId?.correo === user.correo
         );
       });
     }
-  }, [pedidos, user, userRoles.isAdmin]);
+  }, [ventas, user, userRoles.isAdmin]);
 
   // Aplicar filtros y búsqueda (memoizado)
-  const pedidosFiltrados = useMemo(() => {
-    let pedidosFiltradosTemp = [...pedidosBase];
+  const ventasFiltradas = useMemo(() => {
+    let ventasFiltradasTemp = [...ventasBase];
 
     // Filtrar por estado
     if (estadoFiltro !== "todos") {
-      pedidosFiltradosTemp = pedidosFiltradosTemp.filter(
-        (pedido) => pedido.estado === estadoFiltro
+      ventasFiltradasTemp = ventasFiltradasTemp.filter(
+        (venta) => venta.estado === estadoFiltro
       );
     }
 
     // Filtrar por búsqueda (nombre del cliente)
     if (busqueda.trim() !== "") {
-      pedidosFiltradosTemp = pedidosFiltradosTemp.filter((pedido) => {
+      ventasFiltradasTemp = ventasFiltradasTemp.filter((venta) => {
         const nombreCliente =
-          pedido.clienteId?.nombre || pedido.clienteId?.correo || "";
+          venta.clienteId?.nombre || venta.clienteId?.correo || "";
         return nombreCliente.toLowerCase().includes(busqueda.toLowerCase());
       });
     }
 
-    return pedidosFiltradosTemp;
-  }, [pedidosBase, estadoFiltro, busqueda]);
+    return ventasFiltradasTemp;
+  }, [ventasBase, estadoFiltro, busqueda]);
 
-  // ✅ Cargar pedidos inmediatamente cuando el componente se monta
+  // ✅ Cargar ventas inmediatamente cuando el componente se monta
   useEffect(() => {
     const loadInitialData = async () => {
       if (isAuthenticated && user) {
         try {
-          await obtenerPedidos();
+          await obtenerVentas();
         } catch (error) {
-          console.error("Error al cargar pedidos iniciales:", error);
+          console.error("Error al cargar ventas iniciales:", error);
         }
       }
     };
 
     loadInitialData();
-  }, [isAuthenticated, user, obtenerPedidos]);
+  }, [isAuthenticated, user, obtenerVentas]);
 
   // ✅ Refrescar cuando la pantalla está enfocada (pero solo si es necesario)
   useFocusEffect(
@@ -114,14 +109,14 @@ export const Pedidos = () => {
         !lastFetch || Date.now() - lastFetch > 2 * 60 * 1000;
 
       if (shouldRefresh && isAuthenticated && user) {
-        obtenerPedidos();
+        obtenerVentas();
       }
-    }, [obtenerPedidos, lastFetch, isAuthenticated, user])
+    }, [obtenerVentas, lastFetch, isAuthenticated, user])
   );
 
   // Handlers
-  const handleToggleExpanded = useCallback((pedidoId) => {
-    setExpandedOrder((prev) => (prev === pedidoId ? null : pedidoId));
+  const handleToggleExpanded = useCallback((ventaId) => {
+    setExpandedOrder((prev) => (prev === ventaId ? null : ventaId));
   }, []);
 
   const handleClearFilters = useCallback(() => {
@@ -135,26 +130,26 @@ export const Pedidos = () => {
 
   const handleRefresh = useCallback(async () => {
     try {
-      await obtenerPedidos(true); // Forzar refresh
+      await obtenerVentas(true); // Forzar refresh
     } catch (error) {
-      console.error("Error al refrescar pedidos:", error);
+      console.error("Error al refrescar ventas:", error);
     }
-  }, [obtenerPedidos]);
+  }, [obtenerVentas]);
 
   // Determinar qué mostrar basado en el estado
   const renderContent = () => {
     // Mostrar loading solo al inicio o cuando no hay datos
-    if (isLoading && pedidos.length === 0) {
+    if (isLoading && ventas.length === 0) {
       return <LoadingState isAdmin={userRoles.isAdmin} />;
     }
 
     // Mostrar error si existe
-    if (error && pedidos.length === 0) {
+    if (error && ventas.length === 0) {
       return (
         <View className="items-center py-16 px-6">
           <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
           <Text className="text-xl font-bold text-gray-900 mb-3 text-center mt-4">
-            Error al cargar pedidos
+            Error al cargar ventas
           </Text>
           <Text className="text-base text-gray-500 text-center mb-6">
             {error}
@@ -168,12 +163,12 @@ export const Pedidos = () => {
       );
     }
 
-    // Si hay pedidos filtrados, mostrarlos
-    if (pedidosFiltrados.length > 0) {
-      return pedidosFiltrados.map((pedido) => (
-        <OrderCard
-          key={pedido._id}
-          pedido={pedido}
+    // Si hay ventas filtradas, mostrarlas
+    if (ventasFiltradas.length > 0) {
+      return ventasFiltradas.map((venta) => (
+        <SalesCard
+          key={venta._id}
+          ventas={venta}
           isAdmin={userRoles.isAdmin}
           expandedOrder={expandedOrder}
           onToggleExpanded={handleToggleExpanded}
@@ -184,9 +179,9 @@ export const Pedidos = () => {
       ));
     }
 
-    // Si no hay pedidos, mostrar estado vacío
+    // Si no hay ventas, mostrar estado vacío
     return (
-      <EmptyState
+      <EmptyStateVentas
         estadoFiltro={estadoFiltro}
         busqueda={busqueda}
         isAdmin={userRoles.isAdmin}
@@ -210,12 +205,12 @@ export const Pedidos = () => {
           </Pressable>
           <View className="flex-1">
             <Text className="text-2xl font-bold text-gray-900">
-              {userRoles.isAdmin ? "Pedidos realizados" : "Mis pedidos"}
+              {userRoles.isAdmin ? "Ventas realizadas" : "Mis compras"}
             </Text>
             <Text className="text-sm text-gray-500 mt-1">
-              {isLoading && pedidos.length === 0
-                ? "Cargando pedidos..."
-                : `${pedidosFiltrados?.length || 0} pedidos encontrados${
+              {isLoading && ventas.length === 0
+                ? "Cargando ventas..."
+                : `${ventasFiltradas?.length || 0} ventas encontradas${
                     estadoFiltro !== "todos" ? ` • ${estadoFiltro}` : ""
                   }`}
             </Text>
@@ -269,7 +264,7 @@ export const Pedidos = () => {
         )}
       </View>
 
-      {/* Lista de pedidos */}
+      {/* Lista de ventas */}
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
@@ -278,7 +273,7 @@ export const Pedidos = () => {
       </ScrollView>
 
       {/* Modal de filtros */}
-      <FiltroModal
+      <FiltroModalVentas
         visible={filtroModal}
         onClose={() => setFiltroModal(false)}
         estadoFiltro={estadoFiltro}

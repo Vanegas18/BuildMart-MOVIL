@@ -89,15 +89,12 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      console.log("Intentando login con:", usuario);
-
       // Validar datos antes de enviar
       if (!usuario.correo || !usuario.contraseña) {
         throw new Error("Correo y contraseña son requeridos");
       }
 
       const response = await loginRequest(usuario);
-      console.log("Login exitoso:", response.data);
 
       // Guardar token y datos del usuario
       if (response.data.token) {

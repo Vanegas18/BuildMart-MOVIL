@@ -8,14 +8,12 @@ export const registerRequest = (usuario) => axios.post(`/usuarios`, usuario);
 // Servicio para iniciar sesión - CORREGIDO
 export const loginRequest = async (usuario) => {
   try {
-    console.log("Enviando datos de login:", usuario);
 
     const response = await axios.post(`/usuarios/login`, {
       correo: usuario.correo,
       contraseña: usuario.contraseña,
     });
 
-    console.log("Respuesta del servidor:", response.data);
     return response;
   } catch (error) {
     console.error(

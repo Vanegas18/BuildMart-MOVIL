@@ -40,7 +40,6 @@ export function PedidosProvider({ children }) {
       lastFetch &&
       now - lastFetch < CACHE_TIME
     ) {
-      console.log("Usando pedidos desde caché");
       return pedidos;
     }
 
@@ -49,14 +48,12 @@ export function PedidosProvider({ children }) {
     setError(null);
 
     try {
-      console.log("Obteniendo pedidos desde la API...");
       const res = await getOrders();
 
       // Verificar que la respuesta sea válida
       if (res && res.data) {
         setPedidos(res.data);
         setLastFetch(now);
-        console.log(`Pedidos obtenidos: ${res.data.length}`);
       } else {
         console.warn("Respuesta de API inválida:", res);
         setPedidos([]);
