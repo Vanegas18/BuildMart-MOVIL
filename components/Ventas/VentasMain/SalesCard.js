@@ -230,67 +230,7 @@ export const SalesCard = ({
       <View className="flex space-x-3">
         {isAdmin ? (
           // Vista para administradores - Acciones de venta
-          <View className="flex-row space-x-3">
-            // Vista para administradores - Solo cambiar estado
-            <CambiarEstadoVenta venta={ventas} onEstadoCambiado={() => {}} />
-
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                borderRadius: 12,
-                backgroundColor: "#f3f4f6",
-                borderWidth: 1,
-                borderColor: "#d1d5db",
-              }}>
-              <Ionicons
-                name="receipt-outline"
-                size={18}
-                color="#374151"
-                style={{ marginRight: 8 }}
-              />
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: "600",
-                  color: "#374151",
-                }}>
-                Imprimir Factura
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                borderRadius: 12,
-                backgroundColor: "#dcfce7",
-                borderWidth: 1,
-                borderColor: "#16a34a",
-              }}>
-              <Ionicons
-                name="checkmark-circle-outline"
-                size={18}
-                color="#16a34a"
-                style={{ marginRight: 8 }}
-              />
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: "600",
-                  color: "#16a34a",
-                }}>
-                Marcar Entregado
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <CambiarEstadoVenta venta={ventas} onEstadoCambiado={() => {}} />
         ) : (
           // Vista para clientes - Comprar nuevamente
           <TouchableOpacity
