@@ -29,10 +29,15 @@ const EditarPerfil = () => {
     try {
       // Solo envía los campos que queremos actualizar
       const datosActualizados = {
-        _id: perfil._id, // Necesario para identificar el registro
-        nombre,
-        correo,
-        telefono,
+        _id: perfil._id,
+        nombre: nombre.trim(),
+        correo: correo.trim(),
+        telefono: telefono.trim(),
+        // Preserva campos importantes del perfil original
+        direcciones: perfil.direcciones, // Mantiene las direcciones existentes
+        fechaRegistro: perfil.fechaRegistro, // Preserva la fecha de registro
+        estado: perfil.estado, // Preserva el estado actual
+        // NO incluir password, hash, salt, etc.
       };
 
       await editarCliente(datosActualizados);

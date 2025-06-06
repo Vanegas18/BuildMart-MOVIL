@@ -84,10 +84,18 @@ const Direcciones = ({ cliente, onClienteEditado }) => {
               const nuevasDirecciones = cliente.direcciones.filter(
                 (d) => d._id !== direccionId
               );
-              await editarCliente({
-                ...cliente,
+              const datosActualizados = {
+                _id: cliente._id,
                 direcciones: nuevasDirecciones,
-              });
+                // Preserva otros campos importantes sin enviar campos sensibles
+                nombre: cliente.nombre,
+                correo: cliente.correo || cliente.email,
+                telefono: cliente.telefono || cliente.phone || cliente.celular,
+                fechaRegistro: cliente.fechaRegistro,
+                estado: cliente.estado,
+              };
+
+              await editarCliente(datosActualizados);
               onClienteEditado && onClienteEditado();
             } catch (error) {
               console.log(error);
@@ -106,6 +114,43 @@ const Direcciones = ({ cliente, onClienteEditado }) => {
   };
 
   const handleGuardar = async () => {
+    // Validaciones básicas
+    if (!form.tipo.trim()) {
+      Toast.show({
+        type: "error",
+        text1: "Campo requerido",
+        text2: "Por favor selecciona un tipo de dirección",
+      });
+      return;
+    }
+
+    if (!form.calle.trim()) {
+      Toast.show({
+        type: "error",
+        text1: "Campo requerido",
+        text2: "Por favor ingresa la dirección",
+      });
+      return;
+    }
+
+    if (!form.ciudad.trim()) {
+      Toast.show({
+        type: "error",
+        text1: "Campo requerido",
+        text2: "Por favor ingresa la ciudad",
+      });
+      return;
+    }
+
+    if (!form.departamento.trim()) {
+      Toast.show({
+        type: "error",
+        text1: "Campo requerido",
+        text2: "Por favor ingresa el departamento",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       let nuevasDirecciones = [...(cliente.direcciones || [])];
@@ -131,21 +176,38 @@ const Direcciones = ({ cliente, onClienteEditado }) => {
         });
       }
 
-      await editarCliente({
-        ...cliente,
+      const datosActualizados = {
+        _id: cliente._id,
         direcciones: nuevasDirecciones,
-      });
+        // Preserva otros campos importantes sin enviar campos sensibles
+        nombre: cliente.nombre,
+        correo: cliente.correo || cliente.email,
+        telefono: cliente.telefono || cliente.phone || cliente.celular,
+        fechaRegistro: cliente.fechaRegistro,
+        estado: cliente.estado,
+      };
+
+      await editarCliente(datosActualizados);
       onClienteEditado && onClienteEditado();
       setEditandoDireccion(null);
       setAgregandoDireccion(false);
       resetForm();
+
+      Toast.show({
+        type: "success",
+        text1: "Dirección guardada",
+        text2: editandoDireccion
+          ? "Dirección actualizada correctamente"
+          : "Nueva dirección agregada",
+      });
     } catch (error) {
+      console.error("Error al guardar dirección:", error);
       Toast.show({
         type: "error",
         text1: "No se pudo guardar la dirección",
-        text2: error,
+        text2:
+          error.response?.data?.message || error.message || "Error desconocido",
       });
-      console.log(error);
     } finally {
       setLoading(false);
     }
