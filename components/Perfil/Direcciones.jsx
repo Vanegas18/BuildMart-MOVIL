@@ -13,6 +13,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useClientes } from "../../core/context/Clientes/ClientesContext";
 import Toast from "react-native-toast-message";
+import { Ionicons } from "@expo/vector-icons";
 
 const Direcciones = ({ cliente, onClienteEditado }) => {
   const { editarCliente } = useClientes();
@@ -169,22 +170,17 @@ const Direcciones = ({ cliente, onClienteEditado }) => {
           dir._id === editandoDireccion ? { ...dir, ...form } : dir
         );
       } else if (agregandoDireccion) {
-        // Agregar nueva dirección
+        // Agregar nueva dirección - SIN generar ID temporal
         nuevasDirecciones.push({
           ...form,
-          _id: Date.now().toString(), // Genera un id temporal
+          // Remover la línea: _id: Date.now().toString(),
         });
       }
 
+      // Simplificar los datos enviados - solo ID y direcciones
       const datosActualizados = {
         _id: cliente._id,
         direcciones: nuevasDirecciones,
-        // Preserva otros campos importantes sin enviar campos sensibles
-        nombre: cliente.nombre,
-        correo: cliente.correo || cliente.email,
-        telefono: cliente.telefono || cliente.phone || cliente.celular,
-        fechaRegistro: cliente.fechaRegistro,
-        estado: cliente.estado,
       };
 
       await editarCliente(datosActualizados);
@@ -250,13 +246,13 @@ const Direcciones = ({ cliente, onClienteEditado }) => {
                       <TouchableOpacity
                         style={styles.iconBtn}
                         onPress={() => handleEditarDireccion(direccion)}>
-                        <Icon name="edit" size={20} color="#007AFF" />
+                        <Ionicons name="pencil" size={20} color="#007AFF" />
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.iconBtn}
                         onPress={() => handleEliminarDireccion(direccion._id)}
                         disabled={loading}>
-                        <Icon name="delete" size={20} color="#B91C1C" />
+                        <Ionicons name="trash-outline" size={20} color="red" />
                       </TouchableOpacity>
                     </View>
                   </View>

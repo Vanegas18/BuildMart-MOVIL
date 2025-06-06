@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../core/context/Acceso/AuthContext";
 import { useClientes } from "../../core/context/Clientes/ClientesContext";
 import { useRouter } from "expo-router";
@@ -84,30 +84,27 @@ const PerfilCliente = () => {
               {obtenerIniciales(datos?.nombre)}
             </Text>
           </View>
-          <Text style={styles.titleCentered}>Bienvenido,</Text>
+          <Text style={styles.titleCentered}>Bienvenido</Text>
           <Text style={styles.nameCentered}>{datos?.nombre}</Text>
-          <Text style={styles.emailCentered}>
-            {datos?.correo || datos?.email}
-          </Text>
         </View>
 
         {/* Información del perfil */}
         <View style={styles.profileInfoSectionCentered}>
           <Text style={styles.sectionTitleCentered}>Información básica</Text>
           <View style={styles.infoRowCentered}>
-            <Icon name="person" size={20} color="#007AFF" />
+            <Ionicons name="person-outline" size={20} color="#007AFF" />
             <Text style={styles.infoLabelCentered}>Nombre:</Text>
             <Text style={styles.infoValueCentered}>{datos?.nombre}</Text>
           </View>
           <View style={styles.infoRowCentered}>
-            <Icon name="email" size={20} color="#007AFF" />
+            <Ionicons name="mail-outline" size={20} color="#007AFF" />
             <Text style={styles.infoLabelCentered}>Correo:</Text>
             <Text style={styles.infoValueCentered}>
               {datos?.correo || datos?.email}
             </Text>
           </View>
           <View style={styles.infoRowCentered}>
-            <Icon name="phone" size={20} color="#007AFF" />
+            <Ionicons name="call-outline" size={20} color="#007AFF" />
             <Text style={styles.infoLabelCentered}>Teléfono:</Text>
             <Text style={styles.infoValueCentered}>
               {datos?.telefono ||
@@ -122,7 +119,7 @@ const PerfilCliente = () => {
         <TouchableOpacity
           style={styles.editButton}
           onPress={() => router.push("/editar")}>
-          <Icon name="edit" size={20} color="#fff" />
+          <Ionicons name="pencil" size={20} color="#fff" />
           <Text style={styles.editButtonText}>Editar Perfil</Text>
         </TouchableOpacity>
 
