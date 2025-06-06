@@ -7,11 +7,13 @@ import Toast from "react-native-toast-message";
 import { PedidosProvider } from "../core/context/Pedidos/PedidosContext";
 import { Footer } from "../components/Main/Footer";
 import { VentasProvider } from "../core/context/Ventas/VentasContext";
+import { ClientesProvider } from "../core/context/Clientes/ClientesContext";
 
 export default function Layout() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
+      <ClientesProvider>
         <PedidosProvider>
           <VentasProvider>
             <SafeAreaView className="flex-1 bg-white">
@@ -37,6 +39,7 @@ export default function Layout() {
             </SafeAreaView>
           </VentasProvider>
         </PedidosProvider>
+        </ClientesProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );
