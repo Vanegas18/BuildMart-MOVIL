@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   StatusBar,
+  Linking,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -169,7 +170,11 @@ export const FormLoginSimple = () => {
 
           {/* Link de contraseña olvidada */}
           <TouchableOpacity
-            onPress={() => navigation.navigate("RecuperarContrasena")}
+            onPress={() =>
+              Linking.openURL(
+                "https://build-two-sage.vercel.app/recuperar-contrasena"
+              )
+            }
             style={styles.forgotPasswordButton}
             activeOpacity={0.7}>
             <Text style={styles.forgotPasswordText}>
@@ -182,7 +187,9 @@ export const FormLoginSimple = () => {
         <View style={styles.registerSection}>
           <Text style={styles.registerText}>¿No tienes una cuenta? </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Register")}
+            onPress={() =>
+              Linking.openURL("https://build-two-sage.vercel.app/register")
+            }
             activeOpacity={0.7}>
             <Text style={styles.registerLink}>Regístrate aquí</Text>
           </TouchableOpacity>

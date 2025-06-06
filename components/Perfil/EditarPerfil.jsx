@@ -1,38 +1,59 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, Alert, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+} from "react-native";
 import { useClientes } from "../../core/context/Clientes/ClientesContext";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 
 const EditarPerfil = () => {
   const router = useRouter();
   const { perfil, editarCliente, recargarPerfil } = useClientes();
   const [nombre, setNombre] = useState(perfil?.nombre || "");
   const [correo, setCorreo] = useState(perfil?.correo || perfil?.email || "");
-  const [telefono, setTelefono] = useState(perfil?.telefono || perfil?.phone || perfil?.celular || "");
+  const [telefono, setTelefono] = useState(
+    perfil?.telefono || perfil?.phone || perfil?.celular || ""
+  );
   const [loading, setLoading] = useState(false);
 
-const handleGuardar = async () => {
-  setLoading(true);
-  try {
-    // Solo envía los campos que queremos actualizar
-    const datosActualizados = {
-      _id: perfil._id, // Necesario para identificar el registro
-      nombre,
-      correo,
-      telefono,
-    };
-    
-    await editarCliente(datosActualizados);
-    await recargarPerfil();
-    Alert.alert("Éxito", "Perfil actualizado correctamente");
-    router.back();
-  } catch (error) {
-    Alert.alert("Error", "No se pudo actualizar el perfil");
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleGuardar = async () => {
+    setLoading(true);
+    try {
+      // Solo envía los campos que queremos actualizar
+      const datosActualizados = {
+        _id: perfil._id, // Necesario para identificar el registro
+        nombre,
+        correo,
+        telefono,
+      };
+
+      await editarCliente(datosActualizados);
+      await recargarPerfil();
+      Toast.show({
+        type: "success",
+        text1: "Éxito!",
+        text2: "Perfil actualizado correctamente",
+      });
+
+      router.back();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "No se pudo actualizar el perfil",
+        text2: error,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -76,7 +97,10 @@ const handleGuardar = async () => {
             placeholderTextColor="#bbb"
           />
         </View>
-        <TouchableOpacity style={styles.saveButton} onPress={handleGuardar} disabled={loading}>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={handleGuardar}
+          disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
@@ -86,7 +110,10 @@ const handleGuardar = async () => {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cancelButton} onPress={() => router.back()} disabled={loading}>
+        <TouchableOpacity
+          style={styles.cancelButton}
+          onPress={() => router.back()}
+          disabled={loading}>
           <Text style={styles.cancelButtonText}>Cancelar</Text>
         </TouchableOpacity>
       </View>

@@ -35,7 +35,7 @@ export default function HeroSection({ isAuthenticated }) {
             </Pressable>
           </Link>
 
-          <Link href="/registro" asChild>
+          <Link href="https://build-two-sage.vercel.app/register" asChild>
             <Pressable className="bg-gray-200 w-full rounded-lg p-4 active:bg-gray-300 mt-4">
               <View className="flex-row items-center justify-center">
                 <Feather name="user-plus" size={20} color="#2563eb" />

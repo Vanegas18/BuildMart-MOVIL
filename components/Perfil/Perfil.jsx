@@ -1,5 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useAuth } from "../../core/context/Acceso/AuthContext";
 import { useClientes } from "../../core/context/Clientes/ClientesContext";
@@ -15,12 +23,30 @@ const PerfilCliente = () => {
   const datos = perfil || user;
   const cargando = perfilLoading || loadingUser;
 
+  // Función para obtener las iniciales del nombre
+  const obtenerIniciales = (nombre) => {
+    if (!nombre) return "??";
+
+    const palabras = nombre.trim().split(" ");
+    let iniciales = "";
+
+    // Tomar máximo 2 iniciales (primer nombre y segundo nombre/apellido)
+    for (let i = 0; i < Math.min(2, palabras.length); i++) {
+      if (palabras[i] && palabras[i].length > 0) {
+        iniciales += palabras[i][0].toUpperCase();
+      }
+    }
+
+    return iniciales || "??";
+  };
 
   if (cargando) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={{ marginTop: 10 }}>Cargando información de tu perfil...</Text>
+        <Text style={{ marginTop: 10 }}>
+          Cargando información de tu perfil...
+        </Text>
       </View>
     );
   }
@@ -39,57 +65,71 @@ const PerfilCliente = () => {
   if (!datos) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>No se encontró información del usuario.</Text>
+        <Text style={styles.errorText}>
+          No se encontró información del usuario.
+        </Text>
       </View>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      {/* Avatar y Bienvenida */}
-      <View style={styles.headerCentered}>
-        <View style={styles.avatarLarge}>
-          <Icon name="person" size={70} color="#fff" />
-        </View>
-        <Text style={styles.titleCentered}>Bienvenido,</Text>
-        <Text style={styles.nameCentered}>{datos?.nombre}</Text>
-        <Text style={styles.emailCentered}>{datos?.correo || datos?.email}</Text>
-      </View>
+    <View className="flex-1 bg-gray-50">
+      <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
 
-      {/* Información del perfil */}
-      <View style={styles.profileInfoSectionCentered}>
-        <Text style={styles.sectionTitleCentered}>Información básica</Text>
-        <View style={styles.infoRowCentered}>
-          <Icon name="person" size={20} color="#007AFF" />
-          <Text style={styles.infoLabelCentered}>Nombre:</Text>
-          <Text style={styles.infoValueCentered}>{datos?.nombre}</Text>
-        </View>
-        <View style={styles.infoRowCentered}>
-          <Icon name="email" size={20} color="#007AFF" />
-          <Text style={styles.infoLabelCentered}>Correo:</Text>
-          <Text style={styles.infoValueCentered}>{datos?.correo || datos?.email}</Text>
-        </View>
-        <View style={styles.infoRowCentered}>
-          <Icon name="phone" size={20} color="#007AFF" />
-          <Text style={styles.infoLabelCentered}>Teléfono:</Text>
-          <Text style={styles.infoValueCentered}>
-            {datos?.telefono || datos?.phone || datos?.celular || "No registrado"}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Avatar y Bienvenida */}
+        <View style={styles.headerCentered}>
+          <View style={styles.avatarLarge}>
+            <Text style={styles.inicialesText}>
+              {obtenerIniciales(datos?.nombre)}
+            </Text>
+          </View>
+          <Text style={styles.titleCentered}>Bienvenido,</Text>
+          <Text style={styles.nameCentered}>{datos?.nombre}</Text>
+          <Text style={styles.emailCentered}>
+            {datos?.correo || datos?.email}
           </Text>
         </View>
-      </View>
 
-      {/* Botón para editar perfil */}
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => router.push("/editar")}
-      >
-        <Icon name="edit" size={20} color="#fff" />
-        <Text style={styles.editButtonText}>Editar Perfil</Text>
-      </TouchableOpacity>
+        {/* Información del perfil */}
+        <View style={styles.profileInfoSectionCentered}>
+          <Text style={styles.sectionTitleCentered}>Información básica</Text>
+          <View style={styles.infoRowCentered}>
+            <Icon name="person" size={20} color="#007AFF" />
+            <Text style={styles.infoLabelCentered}>Nombre:</Text>
+            <Text style={styles.infoValueCentered}>{datos?.nombre}</Text>
+          </View>
+          <View style={styles.infoRowCentered}>
+            <Icon name="email" size={20} color="#007AFF" />
+            <Text style={styles.infoLabelCentered}>Correo:</Text>
+            <Text style={styles.infoValueCentered}>
+              {datos?.correo || datos?.email}
+            </Text>
+          </View>
+          <View style={styles.infoRowCentered}>
+            <Icon name="phone" size={20} color="#007AFF" />
+            <Text style={styles.infoLabelCentered}>Teléfono:</Text>
+            <Text style={styles.infoValueCentered}>
+              {datos?.telefono ||
+                datos?.phone ||
+                datos?.celular ||
+                "No registrado"}
+            </Text>
+          </View>
+        </View>
 
-      {/* Direcciones del cliente */}
-      <Direcciones cliente={datos} onClienteEditado={recargarPerfil} />
-    </ScrollView>
+        {/* Botón para editar perfil */}
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => router.push("/editar")}>
+          <Icon name="edit" size={20} color="#fff" />
+          <Text style={styles.editButtonText}>Editar Perfil</Text>
+        </TouchableOpacity>
+
+        {/* Direcciones del cliente */}
+        <Direcciones cliente={datos} onClienteEditado={recargarPerfil} />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -114,6 +154,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 15,
+  },
+  inicialesText: {
+    color: "#fff",
+    fontSize: 32,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   titleCentered: {
     fontSize: 20,
@@ -189,7 +235,12 @@ const styles = StyleSheet.create({
     margin: 20,
     alignItems: "center",
   },
-  errorText: { color: "#B91C1C", marginBottom: 10, fontSize: 16, textAlign: "center" },
+  errorText: {
+    color: "#B91C1C",
+    marginBottom: 10,
+    fontSize: 16,
+    textAlign: "center",
+  },
   retryButton: { backgroundColor: "#007AFF", padding: 10, borderRadius: 5 },
   retryButtonText: { color: "#fff", fontWeight: "bold" },
 });
