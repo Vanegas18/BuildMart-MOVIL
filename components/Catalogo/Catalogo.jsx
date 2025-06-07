@@ -45,11 +45,10 @@ export default function CatalogoView() {
     return productosTemp;
   }, [productos, busqueda, filtroPrecio]);
 
-  const handleCotizar = (nombre, stock) => {
-    const mensaje = `¡Hola! Prefabricado Mcv. Estoy interesado en este producto: ${nombre}. Veo que hay ${stock} en existencia.*Necesito llevar:*`;
-    const whatsappURL = `https://wa.me/3142153449?text=${encodeURIComponent(mensaje)}`;
-    Linking.openURL(whatsappURL);
-  };
+const handleCotizar = (nombre, stock) => {
+  const catalogoURL = `https://build-two-sage.vercel.app/catalogo`;
+  Linking.openURL(catalogoURL);
+};
 
 const renderItem = ({ item }) => (
   <View style={styles.card}>
@@ -77,7 +76,10 @@ const renderItem = ({ item }) => (
         style={styles.button}
         onPress={() => handleCotizar(item.nombre, item.stock)}
       >
-        <Text style={styles.buttonText}>¡Cotizar en WhatsApp!</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.buttonText}>Comprar ahora</Text>
+          {/* <Ionicons name="cart-outline" size={16} color="#fff" style={{ marginRight: 5 }} /> */}
+        </View>
       </TouchableOpacity>
     </View>
   </View>
