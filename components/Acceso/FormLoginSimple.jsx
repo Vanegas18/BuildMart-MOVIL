@@ -101,7 +101,7 @@ export const FormLoginSimple = () => {
         <View style={styles.headerContent}>
           <Ionicons name="home" size={24} color="#3b82f6" />
           <Text style={styles.headerTitle}>
-            BUILD <Text style={styles.headerTitleBlue}>MART</Text>
+            Build<Text style={styles.headerTitleBlue}>Mart</Text>
           </Text>
         </View>
 

@@ -50,9 +50,9 @@ export default function HeroSection({ isAuthenticated }) {
         <Link href="/catalogo" asChild>
           <Pressable className="bg-blue-600 w-full rounded-lg p-4 active:bg-blue-700">
             <View className="flex-row items-center justify-center">
-              <Ionicons name="person-outline" size={20} color="#fff" />
+              <Ionicons name="cart-outline" size={20} color="#fff" />
               <Text className="text-white text-base font-bold ml-2">
-                Ir al Catálogo
+                Ir a Nuestra Tienda
               </Text>
             </View>
           </Pressable>
