@@ -8,8 +8,8 @@ export default function Header({ isAuthenticated, onLogoutPress }) {
 
       <View className="flex-row gap-2">
         <Ionicons name="home" size={24} color="#2563eb" />
-        <Text className="text-lg font-bold">
-          BUILD <Text className="text-blue-600 font-bold">MART</Text>
+        <Text className="text-2xl font-bold">
+          Build<Text className="text-blue-600 font-bold">Mart</Text>
         </Text>
       </View>
       {isAuthenticated && (
