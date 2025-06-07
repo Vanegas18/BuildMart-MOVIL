@@ -40,60 +40,73 @@ export const Footer = () => {
           <Link href="/" asChild>
             <Pressable style={styles.navItem}>
               <Ionicons name="home-outline" size={24} color="#2563eb" />
-              <Text style={styles.navText}>Inicio</Text>
+              <Text style={styles.navText}>
+                <Text style={{ fontWeight: "bold" }}>Inicio</Text>
+              </Text>
             </Pressable>
           </Link>
 
           <Link href="/catalogo" asChild>
             <Pressable style={styles.navItem}>
               <Ionicons name="cart-outline" size={24} color="#2563eb" />
-              <Text style={styles.navText}>Tienda</Text>
+              <Text style={styles.navText}>
+                <Text style={{ fontWeight: "bold" }}>Tienda</Text>
+              </Text>
             </Pressable>
           </Link>
 
           {isAuthenticated && isCuentaRol ? (
             <>
-              <Link href="/perfil" asChild>
-                <Pressable style={styles.navItem}>
-                  <Ionicons name="person-outline" size={24} color="#2563eb" />
-                  <Text style={styles.navText}>Perfil</Text>
-                </Pressable>
-              </Link>
 
               <Link href="/pedidos" asChild>
                 <Pressable style={styles.navItem}>
                   <Ionicons name="receipt-outline" size={24} color="#2563eb" />
-                  <Text style={styles.navText}>Pedidos</Text>
+                  <Text style={styles.navText}>
+                    <Text style={{ fontWeight: "bold" }}>Pedidos</Text>
+                  </Text>
                 </Pressable>
               </Link>
 
               <Link href="/ventas" asChild>
                 <Pressable style={styles.navItem}>
                   <Ionicons name="trending-up" size={24} color="#2563eb" />
-                  <Text style={styles.navText}>Compras</Text>
+                  <Text style={styles.navText}>
+                    <Text style={{ fontWeight: "bold" }}>Compras</Text>
+                  </Text>
+                </Pressable>
+              </Link>
+
+              <Link href="/perfil" asChild>
+                <Pressable style={styles.navItem}>
+                  <Ionicons name="person-outline" size={24} color="#2563eb" />
+                  <Text style={styles.navText}>
+                    <Text style={{ fontWeight: "bold" }}>Perfil</Text>
+                  </Text>
                 </Pressable>
               </Link>
             </>
+
+            
           ) : (
             isAdmin && (
               <>
-                <Link href="/pedidos" asChild>
-                  <Pressable style={styles.navItem}>
-                    <Ionicons
-                      name="receipt-outline"
-                      size={24}
-                      color="#2563eb"
-                    />
-                    <Text style={styles.navText}>Pedidos</Text>
-                  </Pressable>
-                </Link>
+                  <Link href="/pedidos" asChild>
+                    <Pressable style={styles.navItem}>
+                      <Ionicons name="receipt-outline" size={24} color="#2563eb" />
+                      <Text style={styles.navText}>
+                        <Text style={{ fontWeight: "bold" }}>Pedidos</Text>
+                      </Text>
+                    </Pressable>
+                  </Link>
 
-                <Link href="/ventas" asChild>
-                  <Pressable style={styles.navItem}>
-                    <Ionicons name="trending-up" size={24} color="#2563eb" />
-                    <Text style={styles.navText}>Ventas</Text>
-                  </Pressable>
-                </Link>
+                  <Link href="/ventas" asChild>
+                    <Pressable style={styles.navItem}>
+                      <Ionicons name="trending-up" size={24} color="#2563eb" />
+                      <Text style={styles.navText}>
+                        <Text style={{ fontWeight: "bold" }}>Ventas</Text>
+                      </Text>
+                    </Pressable>
+                  </Link>
               </>
             )
           )}
