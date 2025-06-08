@@ -345,6 +345,7 @@ const styles = {
     },
     shadowOpacity: 0.1,
     shadowRadius: 8,
+    height: 86,
   },
 
   paginationButton: {
