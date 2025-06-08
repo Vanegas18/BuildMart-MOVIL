@@ -8,17 +8,20 @@ export default function ContactSection() {
     {
       icon: "call-outline",
       title: "Llámanos",
-      subtitle: "+57 300 123 4567",
+      subtitle: "+57 320 458 0644",
+      subtitle2: "Lun-Vie: 8:00 a.m - 06:00 p.m",
     },
     {
       icon: "location-outline",
       title: "Visítenos",
-      subtitle: "Cra 15 #45-67, Bogotá",
+      subtitle: "Calle 46 # 78-340",
+      subtitle2: "Vía Machado, Copacabana",
     },
     {
       icon: "logo-whatsapp",
       title: "WhatsApp",
-      subtitle: "+57 300 123 4567",
+      subtitle: "+57 320 458 0644",
+      subtitle2: "Lun-Vie: 8:00 a.m - 06:00 p.m",
     },
   ];
 
@@ -38,11 +41,14 @@ export default function ContactSection() {
             icon={method.icon}
             title={method.title}
             subtitle={method.subtitle}
+            subtitle2={method.subtitle2}
           />
         ))}
       </View>
 
-      <Link href="https://web.whatsapp.com/" asChild>
+      <Link
+        href="https://api.whatsapp.com/send?phone=573204580644&text=Hola%20%F0%9F%A4%97%20estamos%20felices%20de%20tenerte%20aqu%C3%AD.%20Me%20gustar%C3%ADa%20hacer%20una%20cotizaci%C3%B3n%20sobre..."
+        asChild>
         <Pressable className="w-full mt-4 rounded-lg p-4 bg-black active:bg-gray-800 text-white">
           <View className="flex-row items-center justify-center">
             <Ionicons name="logo-whatsapp" size={20} color="#fff" />
